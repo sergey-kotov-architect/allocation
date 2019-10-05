@@ -1,9 +1,7 @@
 package com.sergeykotov.allocation.service;
 
-import com.sergeykotov.allocation.domain.Actor;
 import com.sergeykotov.allocation.domain.Metrics;
 import com.sergeykotov.allocation.domain.Path;
-import com.sergeykotov.allocation.domain.Vertex;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +24,7 @@ public class OptimisationService {
         return null;
     }
 
-    public Path findShortestPath(Actor actor, Vertex source, Vertex destination) {
+    public Path findShortestPath(Path path) {
         return null;
     }
 }

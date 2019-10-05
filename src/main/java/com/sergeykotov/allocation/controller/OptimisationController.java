@@ -1,15 +1,10 @@
 package com.sergeykotov.allocation.controller;
 
-import com.sergeykotov.allocation.domain.Actor;
 import com.sergeykotov.allocation.domain.Metrics;
 import com.sergeykotov.allocation.domain.Path;
-import com.sergeykotov.allocation.domain.Vertex;
 import com.sergeykotov.allocation.service.OptimisationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/")
@@ -32,7 +27,7 @@ public class OptimisationController {
     }
 
     @GetMapping("path")
-    public Path findShortestPath(Actor actor, Vertex source, Vertex destination) {
-        return optimisationService.findShortestPath(actor, source, destination);
+    public Path findShortestPath(@RequestBody Path path) {
+        return optimisationService.findShortestPath(path);
     }
 }
