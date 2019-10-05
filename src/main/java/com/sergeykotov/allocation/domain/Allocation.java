@@ -22,6 +22,9 @@ public class Allocation {
     @Column(name = "actor_rank", nullable = false)
     private double actorRank;
 
+    @Column(name = "active")
+    private boolean active;
+
     @Column(name = "note", length = 4000)
     private String note;
 
@@ -58,6 +61,14 @@ public class Allocation {
 
     public void setActorRank(double actorRank) {
         this.actorRank = actorRank;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public String getNote() {
