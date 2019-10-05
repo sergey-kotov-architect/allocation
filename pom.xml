@@ -13,7 +13,7 @@
     <version>1</version>
     <name>allocation</name>
     <description>Information system of graph, actors, allocations of actors on the graph, generates an optimal
-        allocation, evaluates its metrics
+        allocation, evaluates its metrics, finds shortest path for an actor from one vertex to another
     </description>
 
     <properties>
