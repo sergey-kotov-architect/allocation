@@ -47,7 +47,7 @@ public class ActorService {
         try {
             return actorRepository.findById(id).orElseThrow(InvalidDataException::new);
         } catch (Exception e) {
-            log.error("failed to extract an actor by id " + id, e);
+            log.error("failed to extract actor by id " + id, e);
             throw new InvalidDataException();
         }
     }
