@@ -39,7 +39,7 @@ public class OptimisationService {
         }
     }
 
-    public List<Allocation> getActiveAllocation() {
+    public List<Allocation> getActiveAllocations() {
         return allocationService.getAll().stream().filter(Allocation::isActive).collect(Collectors.toList());
     }
 

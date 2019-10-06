@@ -26,7 +26,7 @@ public class OptimisationController {
 
     @GetMapping
     public List<Allocation> getActiveAllocations() {
-        return optimisationService.getActiveAllocation();
+        return optimisationService.getActiveAllocations();
     }
 
     @GetMapping("metrics")
