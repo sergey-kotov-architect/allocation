@@ -31,6 +31,12 @@ public class Vertex {
 
     private transient Actor actor;
 
+    private transient double path;
+
+    private transient boolean visited;
+
+    private transient Vertex source;
+
     public Vertex() {
     }
 
@@ -88,6 +94,30 @@ public class Vertex {
 
     public void setActor(Actor actor) {
         this.actor = actor;
+    }
+
+    public double getPath() {
+        return path;
+    }
+
+    public void setPath(double path) {
+        this.path = path;
+    }
+
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
+    }
+
+    public Vertex getSource() {
+        return source;
+    }
+
+    public void setSource(Vertex source) {
+        this.source = source;
     }
 
     @Override
