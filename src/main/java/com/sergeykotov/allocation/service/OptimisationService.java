@@ -78,19 +78,14 @@ public class OptimisationService {
         log.info("making stable matches...");
         while (true) {
             Allocation allocation = allocations.stream()
-                    .filter(a -> a.getActor().getVertex() == null)
+                    .filter(a -> a.getActor().getVertex() == null && !a.isProposed())
                     .findAny().orElse(null);
             if (allocation == null) {
                 break;
             }
-            List<Allocation> unproposed = allocations.stream()
-                    .filter(a -> !a.isProposed()).collect(Collectors.toList());
-            if (unproposed.isEmpty()) {
-                break;
-            }
             Actor actor = allocation.getActor();
-            List<Allocation> candidates = unproposed.stream()
-                    .filter(a -> a.getActor().equals(actor))
+            List<Allocation> candidates = allocations.stream()
+                    .filter(a -> a.getActor().equals(actor) && !a.isProposed())
                     .sorted(Comparator.comparingDouble(Allocation::getVertexRank))
                     .collect(Collectors.toList());
             for (Allocation candidate : candidates) {
