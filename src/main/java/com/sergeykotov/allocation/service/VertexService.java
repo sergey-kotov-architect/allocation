@@ -1,6 +1,7 @@
 package com.sergeykotov.allocation.service;
 
 import com.sergeykotov.allocation.domain.Vertex;
+import com.sergeykotov.allocation.exception.DataModificationException;
 import com.sergeykotov.allocation.exception.ExtractionException;
 import com.sergeykotov.allocation.exception.InvalidDataException;
 import com.sergeykotov.allocation.repository.VertexRepository;
@@ -15,10 +16,12 @@ import java.util.List;
 public class VertexService {
     private static final Logger log = Logger.getLogger(VertexService.class);
     private final VertexRepository vertexRepository;
+    private final OptimisationService optimisationService;
 
     @Autowired
-    public VertexService(VertexRepository vertexRepository) {
+    public VertexService(VertexRepository vertexRepository, OptimisationService optimisationService) {
         this.vertexRepository = vertexRepository;
+        this.optimisationService = optimisationService;
     }
 
     public void create(Vertex vertex) {
@@ -53,6 +56,9 @@ public class VertexService {
     }
 
     public void update(Vertex vertex) {
+        if (optimisationService.isGenerating()) {
+            throw new DataModificationException();
+        }
         log.info("updating vertex... " + vertex);
         try {
             vertexRepository.save(vertex);

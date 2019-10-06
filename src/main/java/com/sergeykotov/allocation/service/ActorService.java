@@ -1,6 +1,7 @@
 package com.sergeykotov.allocation.service;
 
 import com.sergeykotov.allocation.domain.Actor;
+import com.sergeykotov.allocation.exception.DataModificationException;
 import com.sergeykotov.allocation.exception.ExtractionException;
 import com.sergeykotov.allocation.exception.InvalidDataException;
 import com.sergeykotov.allocation.repository.ActorRepository;
@@ -15,10 +16,12 @@ import java.util.List;
 public class ActorService {
     private static final Logger log = Logger.getLogger(ActorService.class);
     private final ActorRepository actorRepository;
+    private final OptimisationService optimisationService;
 
     @Autowired
-    public ActorService(ActorRepository actorRepository) {
+    public ActorService(ActorRepository actorRepository, OptimisationService optimisationService) {
         this.actorRepository = actorRepository;
+        this.optimisationService = optimisationService;
     }
 
     public void create(Actor actor) {
@@ -53,6 +56,9 @@ public class ActorService {
     }
 
     public void update(Actor actor) {
+        if (optimisationService.isGenerating()) {
+            throw new DataModificationException();
+        }
         log.info("updating actor... " + actor);
         try {
             actorRepository.save(actor);

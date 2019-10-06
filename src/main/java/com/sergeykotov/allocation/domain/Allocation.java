@@ -28,6 +28,10 @@ public class Allocation {
     @Column(name = "note", length = 4000)
     private String note;
 
+    private transient double vertexRank;
+
+    private transient boolean proposed;
+
     public Allocation() {
     }
 
@@ -77,6 +81,22 @@ public class Allocation {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public double getVertexRank() {
+        return vertexRank;
+    }
+
+    public void setVertexRank(double vertexRank) {
+        this.vertexRank = vertexRank;
+    }
+
+    public boolean isProposed() {
+        return proposed;
+    }
+
+    public void setProposed(boolean proposed) {
+        this.proposed = proposed;
     }
 
     @Override

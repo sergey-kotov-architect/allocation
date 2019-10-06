@@ -1,6 +1,7 @@
 package com.sergeykotov.allocation.service;
 
 import com.sergeykotov.allocation.domain.Edge;
+import com.sergeykotov.allocation.exception.DataModificationException;
 import com.sergeykotov.allocation.exception.ExtractionException;
 import com.sergeykotov.allocation.exception.InvalidDataException;
 import com.sergeykotov.allocation.repository.EdgeRepository;
@@ -15,10 +16,12 @@ import java.util.List;
 public class EdgeService {
     private static final Logger log = Logger.getLogger(EdgeService.class);
     private final EdgeRepository edgeRepository;
+    private final OptimisationService optimisationService;
 
     @Autowired
-    public EdgeService(EdgeRepository edgeRepository) {
+    public EdgeService(EdgeRepository edgeRepository, OptimisationService optimisationService) {
         this.edgeRepository = edgeRepository;
+        this.optimisationService = optimisationService;
     }
 
     public void create(Edge edge) {
@@ -53,6 +56,9 @@ public class EdgeService {
     }
 
     public void update(Edge edge) {
+        if (optimisationService.isGenerating()) {
+            throw new DataModificationException();
+        }
         log.info("updating edge... " + edge);
         try {
             edgeRepository.save(edge);

@@ -1,6 +1,7 @@
 package com.sergeykotov.allocation.service;
 
 import com.sergeykotov.allocation.domain.Allocation;
+import com.sergeykotov.allocation.exception.DataModificationException;
 import com.sergeykotov.allocation.exception.ExtractionException;
 import com.sergeykotov.allocation.exception.InvalidDataException;
 import com.sergeykotov.allocation.repository.AllocationRepository;
@@ -15,13 +16,18 @@ import java.util.List;
 public class AllocationService {
     private static final Logger log = Logger.getLogger(AllocationService.class);
     private final AllocationRepository allocationRepository;
+    private final OptimisationService optimisationService;
 
     @Autowired
-    public AllocationService(AllocationRepository allocationRepository) {
+    public AllocationService(AllocationRepository allocationRepository, OptimisationService optimisationService) {
         this.allocationRepository = allocationRepository;
+        this.optimisationService = optimisationService;
     }
 
     public void create(Allocation allocation) {
+        if (optimisationService.isGenerating()) {
+            throw new DataModificationException();
+        }
         log.info("creating allocation... " + allocation);
         try {
             allocationRepository.save(allocation);
@@ -53,6 +59,9 @@ public class AllocationService {
     }
 
     public void update(Allocation allocation) {
+        if (optimisationService.isGenerating()) {
+            throw new DataModificationException();
+        }
         log.info("updating allocation... " + allocation);
         try {
             allocationRepository.save(allocation);
@@ -63,7 +72,14 @@ public class AllocationService {
         log.info("allocation has been updated " + allocation);
     }
 
+    public void update(List<Allocation> allocations) {
+        allocationRepository.saveAll(allocations);
+    }
+
     public void deleteById(long id) {
+        if (optimisationService.isGenerating()) {
+            throw new DataModificationException();
+        }
         log.info("deleting allocation by id " + id);
         try {
             allocationRepository.deleteById(id);
