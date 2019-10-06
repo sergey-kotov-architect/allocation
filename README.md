@@ -5,6 +5,7 @@ evaluates its metrics, finds shortest path for an actor from one vertex to anoth
 * generate an optimal allocation of actors on the graph
 * evaluate metrics of the allocation
 * find shortest path for an actor from one vertex to another
+* extract active allocations
 * extract all, by id, create, update, delete by id actors, vertices, edges, allocations
 * provide REST API for the functions
 

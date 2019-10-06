@@ -39,6 +39,10 @@ public class OptimisationService {
         }
     }
 
+    public List<Allocation> getActiveAllocation() {
+        return allocationService.getAll().stream().filter(Allocation::isActive).collect(Collectors.toList());
+    }
+
     public Metrics evaluateMetrics() {
         //TODO: evaluate metrics
         return null;
