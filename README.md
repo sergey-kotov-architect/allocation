@@ -13,6 +13,7 @@ Optimisation consists of two phases: evaluate vertex rank for actor based on Dij
 using function of speed, speed limit, distance and vertex rank, 
 create stable matches using Gale-Shapley algorithm to solve stable marriage/matching problem 
 between actors and vertices according to their mutual ranks   
+
 [OptimisationService](src/main/java/com/sergeykotov/allocation/service/OptimisationService.java)
 
 ### Database

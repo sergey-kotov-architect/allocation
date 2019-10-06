@@ -1,15 +1,15 @@
 package com.sergeykotov.allocation.service;
 
-import com.sergeykotov.allocation.domain.Allocation;
-import com.sergeykotov.allocation.domain.Metrics;
-import com.sergeykotov.allocation.domain.Path;
+import com.sergeykotov.allocation.domain.*;
 import com.sergeykotov.allocation.exception.DataModificationException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 @Service
 public class OptimisationService {
@@ -75,6 +75,46 @@ public class OptimisationService {
     }
 
     private void makeStableMatches(List<Allocation> allocations) {
-
+        log.info("making stable matches...");
+        while (true) {
+            Allocation allocation = allocations.stream()
+                    .filter(a -> a.getActor().getVertex() == null)
+                    .findAny().orElse(null);
+            if (allocation == null) {
+                break;
+            }
+            List<Allocation> unproposed = allocations.stream()
+                    .filter(a -> !a.isProposed()).collect(Collectors.toList());
+            if (unproposed.isEmpty()) {
+                break;
+            }
+            Actor actor = allocation.getActor();
+            List<Allocation> candidates = unproposed.stream()
+                    .filter(a -> a.getActor().equals(actor))
+                    .sorted(Comparator.comparingDouble(Allocation::getVertexRank))
+                    .collect(Collectors.toList());
+            for (Allocation candidate : candidates) {
+                candidate.setProposed(true);
+                Vertex vertex = candidate.getVertex();
+                Actor rival = vertex.getActor();
+                if (rival == null) {
+                    vertex.setActor(actor);
+                    actor.setVertex(vertex);
+                    candidate.setActive(true);
+                    break;
+                }
+                Allocation rivalAllocation = allocations.stream()
+                        .filter(a -> a.getActor().equals(rival) && a.getVertex().equals(vertex))
+                        .findAny().orElse(null);
+                if (rivalAllocation != null && rivalAllocation.getActorRank() < allocation.getActorRank()) {
+                    rival.setVertex(null);
+                    rivalAllocation.setActive(false);
+                    vertex.setActor(actor);
+                    actor.setVertex(vertex);
+                    candidate.setActive(true);
+                    break;
+                }
+            }
+        }
     }
 }

@@ -26,6 +26,8 @@ public class Actor {
     @OneToMany(mappedBy = "actor")
     private List<Allocation> allocations;
 
+    private transient Vertex vertex;
+
     public Actor() {
     }
 
@@ -67,6 +69,14 @@ public class Actor {
 
     public void setAllocations(List<Allocation> allocations) {
         this.allocations = allocations;
+    }
+
+    public Vertex getVertex() {
+        return vertex;
+    }
+
+    public void setVertex(Vertex vertex) {
+        this.vertex = vertex;
     }
 
     @Override
