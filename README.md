@@ -6,6 +6,14 @@ evaluates its metrics, finds shortest path for an actor from one vertex to anoth
 * evaluate metrics of the allocation
 * find shortest path for an actor from one vertex to another
 * extract all, by id, create, update, delete by id actors, vertices, edges, allocations
+* provide REST API for the functions
+
+### Optimisation
+Optimisation consists of two phases: evaluate vertex rank for actor based on Dijkstra algorithm to find shortest path 
+using function of speed, speed limit, distance and vertex rank, 
+create stable matches using Gale-Shapley algorithm to solve stable marriage/matching problem 
+between actors and vertices according to their mutual ranks   
+[OptimisationService](src/main/java/com/sergeykotov/allocation/service/OptimisationService.java)
 
 ### Database
 ![database diagram](src/main/resources/allocation-db-diagram.png)  
