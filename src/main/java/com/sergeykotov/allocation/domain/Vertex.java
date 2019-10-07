@@ -9,7 +9,7 @@ import java.util.Objects;
 @Table(name = "vertex")
 public class Vertex {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     private long id;
 
