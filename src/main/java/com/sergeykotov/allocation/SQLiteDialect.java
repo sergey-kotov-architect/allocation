@@ -1,4 +1,4 @@
-package com.sergeykotov.allocation.repository;
+package com.sergeykotov.allocation;
 
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.identity.IdentityColumnSupport;

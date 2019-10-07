@@ -35,7 +35,7 @@ public class DatabaseConfiguration {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         final LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
-        em.setPackagesToScan(new String[]{"com.sergeykotov.allocation.domain"});
+        em.setPackagesToScan(new String[]{"com.sergeykotov.allocation"});
         em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         em.setJpaProperties(additionalProperties());
         return em;
@@ -43,14 +43,8 @@ public class DatabaseConfiguration {
 
     final Properties additionalProperties() {
         final Properties hibernateProperties = new Properties();
-        if (env.getProperty("hibernate.hbm2ddl.auto") != null) {
-            hibernateProperties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
-        }
         if (env.getProperty("hibernate.dialect") != null) {
             hibernateProperties.setProperty("hibernate.dialect", env.getProperty("hibernate.dialect"));
-        }
-        if (env.getProperty("hibernate.show_sql") != null) {
-            hibernateProperties.setProperty("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
         }
         return hibernateProperties;
     }
