@@ -16,7 +16,9 @@ public class EdgeDao {
     private static final String CREATE_CMD =
             "insert into edge (name, note, speed_limit, distance, source_id, destination_id) values (?, ?, ?, ?, ?, ?);";
     private static final String GET_CMD = "select e.id, e.name, e.note, e.speed_limit, e.distance, e.source_id, " +
-            "e.destination_id from edge e;";
+            "v.name as s_name, v.note as s_note, v.rank as s_rank, " +
+            "e.destination_id, v2.name as d_name, v2.note as d_note, v2.rank as d_rank " +
+            "from edge e join vertex v on e.source_id = v.id join vertex v2 on e.destination_id = v2.id;";
     private static final String UPDATE_CMD = "update edge set name = ?, note = ?, speed_limit = ?, distance = ?, " +
             "source_id = ?, destination_id = ? where id = ?";
     private static final String DELETE_CMD = "delete from edge where id = ?";
@@ -42,11 +44,15 @@ public class EdgeDao {
             while (resultSet.next()) {
                 Vertex source = new Vertex();
                 source.setId(resultSet.getLong("source_id"));
-                //
+                source.setName(resultSet.getString("s_name"));
+                source.setNote(resultSet.getString("s_note"));
+                source.setRank(resultSet.getDouble("s_rank"));
 
                 Vertex destination = new Vertex();
                 destination.setId(resultSet.getLong("destination_id"));
-                //
+                destination.setName(resultSet.getString("d_name"));
+                destination.setNote(resultSet.getString("d_note"));
+                destination.setRank(resultSet.getDouble("d_rank"));
 
                 Edge edge = new Edge();
                 edge.setId(resultSet.getLong("id"));
