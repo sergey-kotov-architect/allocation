@@ -2,6 +2,7 @@ package com.sergeykotov.allocation.service;
 
 import com.sergeykotov.allocation.domain.*;
 import com.sergeykotov.allocation.exception.DataModificationException;
+import com.sergeykotov.allocation.exception.InvalidDataException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,11 +53,25 @@ public class OptimisationService {
         log.info("extracting vertices to find shortest path...");
         Set<Vertex> vertices = new HashSet<>(vertexService.getAll());
         Actor actor = path.getActor();
-        Vertex source = path.getSource();
-        Vertex destination = path.getDestination();
+        if (actor == null) {
+            throw new InvalidDataException();
+        }
+        Vertex source = vertices.stream()
+                .filter(v -> v.equals(path.getSource()))
+                .findAny().orElseThrow(InvalidDataException::new);
+        Vertex destination = vertices.stream()
+                .filter(v -> v.equals(path.getDestination()))
+                .findAny().orElseThrow(InvalidDataException::new);
         log.info("finding shortest path for " + actor + " from " + source + " to " + destination + "...");
         evaluatePaths(actor, path.getSource(), vertices);
-        //TODO: build shortest path
+        path.setValue(destination.getPath());
+        Vertex vertex = destination;
+        while (vertex != null && !vertex.equals(source)) {
+            path.getVertices().add(vertex);
+            vertex = vertex.getSource();
+        }
+        path.getVertices().add(source);
+        Collections.reverse(path.getVertices());
         log.info("path has been found");
         return path;
     }
