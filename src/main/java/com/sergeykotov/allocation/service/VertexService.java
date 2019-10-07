@@ -1,34 +1,34 @@
 package com.sergeykotov.allocation.service;
 
+import com.sergeykotov.allocation.dao.VertexDao;
 import com.sergeykotov.allocation.domain.Vertex;
 import com.sergeykotov.allocation.exception.DataModificationException;
 import com.sergeykotov.allocation.exception.ExtractionException;
 import com.sergeykotov.allocation.exception.InvalidDataException;
-import com.sergeykotov.allocation.repository.VertexRepository;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
 public class VertexService {
     private static final Logger log = Logger.getLogger(VertexService.class);
-    private final VertexRepository vertexRepository;
+    private final VertexDao vertexDao;
     private final OptimisationService optimisationService;
 
     @Autowired
-    public VertexService(VertexRepository vertexRepository, OptimisationService optimisationService) {
-        this.vertexRepository = vertexRepository;
+    public VertexService(VertexDao vertexDao, OptimisationService optimisationService) {
+        this.vertexDao = vertexDao;
         this.optimisationService = optimisationService;
     }
 
     public void create(Vertex vertex) {
         log.info("creating vertex... " + vertex);
         try {
-            vertexRepository.save(vertex);
-        } catch (Exception e) {
+            vertexDao.create(vertex);
+        } catch (SQLException e) {
             log.error("failed to create vertex " + vertex, e);
             throw new InvalidDataException();
         }
@@ -36,20 +36,20 @@ public class VertexService {
     }
 
     public List<Vertex> getAll() {
-        List<Vertex> vertices = new ArrayList<>();
         try {
-            vertexRepository.findAll().forEach(vertices::add);
-        } catch (Exception e) {
+            return vertexDao.getAll();
+        } catch (SQLException e) {
             log.error("failed to extract vertices", e);
             throw new ExtractionException();
         }
-        return vertices;
     }
 
     public Vertex getById(long id) {
         try {
-            return vertexRepository.findById(id).orElseThrow(InvalidDataException::new);
-        } catch (Exception e) {
+            return vertexDao.getAll().stream()
+                    .filter(v -> v.getId() == id)
+                    .findAny().orElseThrow(InvalidDataException::new);
+        } catch (SQLException e) {
             log.error("failed to extract vertex by id " + id, e);
             throw new InvalidDataException();
         }
@@ -61,8 +61,8 @@ public class VertexService {
         }
         log.info("updating vertex... " + vertex);
         try {
-            vertexRepository.save(vertex);
-        } catch (Exception e) {
+            vertexDao.update(vertex);
+        } catch (SQLException e) {
             log.error("failed to update vertex " + vertex, e);
             throw new InvalidDataException();
         }
@@ -72,8 +72,8 @@ public class VertexService {
     public void deleteById(long id) {
         log.info("deleting vertex by id " + id);
         try {
-            vertexRepository.deleteById(id);
-        } catch (Exception e) {
+            vertexDao.deleteById(id);
+        } catch (SQLException e) {
             log.error("failed to delete vertex by id " + id, e);
             throw new InvalidDataException();
         }

@@ -1,30 +1,12 @@
 package com.sergeykotov.allocation.domain;
 
-import javax.persistence.*;
-import javax.validation.constraints.Positive;
-import java.util.List;
 import java.util.Objects;
 
-@Entity
-@Table(name = "actor")
 public class Actor {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, unique = true, updatable = false)
     private long id;
-
-    @Column(name = "name", nullable = false, unique = true)
     private String name;
-
-    @Column(name = "note", length = 4000)
     private String note;
-
-    @Positive
-    @Column(name = "speed", nullable = false)
     private double speed;
-
-    @OneToMany(mappedBy = "actor")
-    private List<Allocation> allocations;
 
     private transient Vertex vertex;
 
@@ -61,14 +43,6 @@ public class Actor {
 
     public void setSpeed(double speed) {
         this.speed = speed;
-    }
-
-    public List<Allocation> getAllocations() {
-        return allocations;
-    }
-
-    public void setAllocations(List<Allocation> allocations) {
-        this.allocations = allocations;
     }
 
     public Vertex getVertex() {

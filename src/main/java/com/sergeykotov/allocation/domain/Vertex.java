@@ -1,40 +1,17 @@
 package com.sergeykotov.allocation.domain;
 
-import javax.persistence.*;
-import javax.validation.constraints.Positive;
 import java.util.List;
 import java.util.Objects;
 
-@Entity
-@Table(name = "vertex")
 public class Vertex {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, unique = true, updatable = false)
     private long id;
-
-    @Column(name = "name", nullable = false, unique = true)
     private String name;
-
-    @Column(name = "note", length = 4000)
     private String note;
-
-    @Positive
-    @Column(name = "rank", nullable = false)
     private double rank;
-
-    @OneToMany(mappedBy = "source")
-    private List<Edge> edges;
-
-    @OneToMany(mappedBy = "vertex")
-    private List<Allocation> allocations;
-
+    private transient List<Edge> edges;
     private transient Actor actor;
-
     private transient double path;
-
     private transient boolean visited;
-
     private transient Vertex source;
 
     public Vertex() {
@@ -78,14 +55,6 @@ public class Vertex {
 
     public void setEdges(List<Edge> edges) {
         this.edges = edges;
-    }
-
-    public List<Allocation> getAllocations() {
-        return allocations;
-    }
-
-    public void setAllocations(List<Allocation> allocations) {
-        this.allocations = allocations;
     }
 
     public Actor getActor() {

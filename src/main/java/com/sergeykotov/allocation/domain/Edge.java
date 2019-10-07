@@ -1,37 +1,14 @@
 package com.sergeykotov.allocation.domain;
 
-import javax.persistence.*;
-import javax.validation.constraints.Positive;
 import java.util.Objects;
 
-@Entity
-@Table(name = "edge")
 public class Edge {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, unique = true, updatable = false)
     private long id;
-
-    @Column(name = "name", nullable = false)
     private String name;
-
-    @Column(name = "note", length = 4000)
     private String note;
-
-    @Positive
-    @Column(name = "speed_limit", nullable = false)
     private double speedLimit;
-
-    @Positive
-    @Column(name = "distance", nullable = false)
     private double distance;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "source_id", nullable = false)
     private Vertex source;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "destination_id", nullable = false)
     private Vertex destination;
 
     public long getId() {

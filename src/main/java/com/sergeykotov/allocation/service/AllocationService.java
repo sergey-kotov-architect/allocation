@@ -1,26 +1,26 @@
 package com.sergeykotov.allocation.service;
 
+import com.sergeykotov.allocation.dao.AllocationDao;
 import com.sergeykotov.allocation.domain.Allocation;
 import com.sergeykotov.allocation.exception.DataModificationException;
 import com.sergeykotov.allocation.exception.ExtractionException;
 import com.sergeykotov.allocation.exception.InvalidDataException;
-import com.sergeykotov.allocation.repository.AllocationRepository;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
 public class AllocationService {
     private static final Logger log = Logger.getLogger(AllocationService.class);
-    private final AllocationRepository allocationRepository;
+    private final AllocationDao allocationDao;
     private final OptimisationService optimisationService;
 
     @Autowired
-    public AllocationService(AllocationRepository allocationRepository, OptimisationService optimisationService) {
-        this.allocationRepository = allocationRepository;
+    public AllocationService(AllocationDao allocationDao, OptimisationService optimisationService) {
+        this.allocationDao = allocationDao;
         this.optimisationService = optimisationService;
     }
 
@@ -30,8 +30,8 @@ public class AllocationService {
         }
         log.info("creating allocation... " + allocation);
         try {
-            allocationRepository.save(allocation);
-        } catch (Exception e) {
+            allocationDao.create(allocation);
+        } catch (SQLException e) {
             log.error("failed to create allocation " + allocation, e);
             throw new InvalidDataException();
         }
@@ -39,20 +39,20 @@ public class AllocationService {
     }
 
     public List<Allocation> getAll() {
-        List<Allocation> allocations = new ArrayList<>();
         try {
-            allocationRepository.findAll().forEach(allocations::add);
-        } catch (Exception e) {
+            return allocationDao.getAll();
+        } catch (SQLException e) {
             log.error("failed to extract allocations", e);
             throw new ExtractionException();
         }
-        return allocations;
     }
 
     public Allocation getById(long id) {
         try {
-            return allocationRepository.findById(id).orElseThrow(InvalidDataException::new);
-        } catch (Exception e) {
+            return allocationDao.getAll().stream()
+                    .filter(a -> a.getId() == id)
+                    .findAny().orElseThrow(InvalidDataException::new);
+        } catch (SQLException e) {
             log.error("failed to extract allocation by id " + id, e);
             throw new InvalidDataException();
         }
@@ -64,8 +64,8 @@ public class AllocationService {
         }
         log.info("updating allocation... " + allocation);
         try {
-            allocationRepository.save(allocation);
-        } catch (Exception e) {
+            allocationDao.update(allocation);
+        } catch (SQLException e) {
             log.error("failed to update allocation " + allocation, e);
             throw new InvalidDataException();
         }
@@ -73,7 +73,17 @@ public class AllocationService {
     }
 
     public void update(List<Allocation> allocations) {
-        allocationRepository.saveAll(allocations);
+        if (optimisationService.isGenerating()) {
+            throw new DataModificationException();
+        }
+        log.info("updating allocations... " + allocations);
+        try {
+            allocationDao.update(allocations);
+        } catch (SQLException e) {
+            log.error("failed to update allocations " + allocations, e);
+            throw new InvalidDataException();
+        }
+        log.info("allocations have been updated " + allocations);
     }
 
     public void deleteById(long id) {
@@ -82,7 +92,7 @@ public class AllocationService {
         }
         log.info("deleting allocation by id " + id);
         try {
-            allocationRepository.deleteById(id);
+            allocationDao.deleteById(id);
         } catch (Exception e) {
             log.error("failed to delete allocation by id " + id, e);
             throw new InvalidDataException();
