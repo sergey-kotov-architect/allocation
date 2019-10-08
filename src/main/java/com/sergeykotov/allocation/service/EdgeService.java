@@ -16,12 +16,12 @@ import java.util.List;
 public class EdgeService {
     private static final Logger log = Logger.getLogger(EdgeService.class);
     private final EdgeDao edgeDao;
-    private final OptimisationService optimisationService;
+    private final GraphService graphService;
 
     @Autowired
-    public EdgeService(EdgeDao edgeDao, OptimisationService optimisationService) {
+    public EdgeService(EdgeDao edgeDao, GraphService graphService) {
         this.edgeDao = edgeDao;
-        this.optimisationService = optimisationService;
+        this.graphService = graphService;
     }
 
     public void create(Edge edge) {
@@ -56,7 +56,7 @@ public class EdgeService {
     }
 
     public void update(Edge edge) {
-        if (optimisationService.isGenerating()) {
+        if (graphService.isGenerating()) {
             throw new DataModificationException();
         }
         log.info("updating edge... " + edge);

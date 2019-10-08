@@ -1,112 +1,25 @@
 package com.sergeykotov.allocation.service;
 
-import com.sergeykotov.allocation.domain.*;
-import com.sergeykotov.allocation.exception.DataModificationException;
-import com.sergeykotov.allocation.exception.InvalidDataException;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.sergeykotov.allocation.domain.Actor;
+import com.sergeykotov.allocation.domain.Allocation;
+import com.sergeykotov.allocation.domain.Edge;
+import com.sergeykotov.allocation.domain.Vertex;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class OptimisationService {
-    private static final Logger log = Logger.getLogger(OptimisationService.class);
-    private static final AtomicBoolean generating = new AtomicBoolean();
-    private final AllocationService allocationService;
-    private final VertexService vertexService;
-
-    @Autowired
-    public OptimisationService(AllocationService allocationService, VertexService vertexService) {
-        this.allocationService = allocationService;
-        this.vertexService = vertexService;
-    }
-
-    public boolean isGenerating() {
-        return generating.get();
-    }
-
-    public String generateOptimalAllocation() {
-        if (generating.get()) {
-            throw new DataModificationException();
-        }
-        generating.set(true);
-        try {
-            return generate();
-        } finally {
-            generating.set(false);
-        }
-    }
-
-    public List<Allocation> getActiveAllocations() {
-        return allocationService.getAll().stream().filter(Allocation::isActive).collect(Collectors.toList());
-    }
-
-    public Metrics evaluateMetrics() {
-        //TODO: evaluate metrics
-        return null;
-    }
-
-    public Path findShortestPath(Path path) {
-        log.info("extracting vertices to find shortest path...");
-        Set<Vertex> vertices = new HashSet<>(vertexService.getAll());
-        Actor actor = path.getActor();
-        if (actor == null) {
-            throw new InvalidDataException();
-        }
-        Vertex source = vertices.stream()
-                .filter(v -> v.equals(path.getSource()))
-                .findAny().orElseThrow(InvalidDataException::new);
-        Vertex destination = vertices.stream()
-                .filter(v -> v.equals(path.getDestination()))
-                .findAny().orElseThrow(InvalidDataException::new);
-        log.info("finding shortest path for " + actor + " from " + source + " to " + destination + "...");
-        evaluatePaths(actor, path.getSource(), vertices);
-        path.setValue(destination.getPath());
-        Vertex vertex = destination;
-        while (vertex != null && !vertex.equals(source)) {
-            path.getVertices().add(vertex);
-            vertex = vertex.getSource();
-        }
-        path.getVertices().add(source);
-        Collections.reverse(path.getVertices());
-        log.info("path has been found");
-        return path;
-    }
-
-    private String generate() {
-        log.info("extracting allocations to optimise...");
-        List<Allocation> allocations = allocationService.getAll();
-        log.info(allocations.size() + " allocations have been extracted");
-        allocations.forEach(a -> a.setActive(false));
-
-        long start = System.currentTimeMillis();
-        evaluateVertexRanks(allocations);
-        makeStableMatches(allocations);
-        long elapsed = System.currentTimeMillis() - start;
-
-        log.info("saving generated optimal allocation to the database...");
-        try {
-            allocationService.update(allocations);
-        } catch (Exception e) {
-            String message = "failed to save generated optimal allocation to db, elapsed " + elapsed + " milliseconds";
-            log.error(message, e);
-            return message;
-        }
-        String message = "optimal allocation has been generated, elapsed " + elapsed + " milliseconds";
-        log.info(message);
-        return message;
-    }
-
-    private void evaluateVertexRanks(List<Allocation> allocations) {
+    public void evaluateVertexRanks(List<Allocation> allocations) {
         Set<Vertex> vertices = allocations.stream().map(Allocation::getVertex).collect(Collectors.toSet());
         allocations.forEach(a -> a.setVertexRank(evaluateVertexRank(a.getActor(), a.getVertex(), vertices)));
     }
 
-    private void makeStableMatches(List<Allocation> allocations) {
-        log.info("making stable matches...");
+    public void makeStableMatches(List<Allocation> allocations) {
         while (true) {
             Allocation allocation = allocations.stream()
                     .filter(a -> a.getActor().getVertex() == null && !a.isProposed())
@@ -156,7 +69,7 @@ public class OptimisationService {
         return deviationSum / pathCount;
     }
 
-    private void evaluatePaths(Actor actor, Vertex vertex, Set<Vertex> vertices) {
+    public void evaluatePaths(Actor actor, Vertex vertex, Set<Vertex> vertices) {
         vertices.forEach(v -> {
             v.setPath(Double.MAX_VALUE);
             v.setVisited(false);

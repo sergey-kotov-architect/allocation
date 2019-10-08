@@ -16,12 +16,12 @@ import java.util.List;
 public class VertexService {
     private static final Logger log = Logger.getLogger(VertexService.class);
     private final VertexDao vertexDao;
-    private final OptimisationService optimisationService;
+    private final GraphService graphService;
 
     @Autowired
-    public VertexService(VertexDao vertexDao, OptimisationService optimisationService) {
+    public VertexService(VertexDao vertexDao, GraphService graphService) {
         this.vertexDao = vertexDao;
-        this.optimisationService = optimisationService;
+        this.graphService = graphService;
     }
 
     public void create(Vertex vertex) {
@@ -56,7 +56,7 @@ public class VertexService {
     }
 
     public void update(Vertex vertex) {
-        if (optimisationService.isGenerating()) {
+        if (graphService.isGenerating()) {
             throw new DataModificationException();
         }
         log.info("updating vertex... " + vertex);

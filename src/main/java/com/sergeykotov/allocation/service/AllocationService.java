@@ -16,16 +16,16 @@ import java.util.List;
 public class AllocationService {
     private static final Logger log = Logger.getLogger(AllocationService.class);
     private final AllocationDao allocationDao;
-    private final OptimisationService optimisationService;
+    private final GraphService graphService;
 
     @Autowired
-    public AllocationService(AllocationDao allocationDao, OptimisationService optimisationService) {
+    public AllocationService(AllocationDao allocationDao, GraphService graphService) {
         this.allocationDao = allocationDao;
-        this.optimisationService = optimisationService;
+        this.graphService = graphService;
     }
 
     public void create(Allocation allocation) {
-        if (optimisationService.isGenerating()) {
+        if (graphService.isGenerating()) {
             throw new DataModificationException();
         }
         log.info("creating allocation... " + allocation);
@@ -59,7 +59,7 @@ public class AllocationService {
     }
 
     public void update(Allocation allocation) {
-        if (optimisationService.isGenerating()) {
+        if (graphService.isGenerating()) {
             throw new DataModificationException();
         }
         log.info("updating allocation... " + allocation);
@@ -73,7 +73,7 @@ public class AllocationService {
     }
 
     public void update(List<Allocation> allocations) {
-        if (optimisationService.isGenerating()) {
+        if (graphService.isGenerating()) {
             throw new DataModificationException();
         }
         log.info("updating allocations... " + allocations);
@@ -87,7 +87,7 @@ public class AllocationService {
     }
 
     public void deleteById(long id) {
-        if (optimisationService.isGenerating()) {
+        if (graphService.isGenerating()) {
             throw new DataModificationException();
         }
         log.info("deleting allocation by id " + id);

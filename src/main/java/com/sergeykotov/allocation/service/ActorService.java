@@ -16,12 +16,12 @@ import java.util.List;
 public class ActorService {
     private static final Logger log = Logger.getLogger(ActorService.class);
     private final ActorDao actorDao;
-    private final OptimisationService optimisationService;
+    private final GraphService graphService;
 
     @Autowired
-    public ActorService(ActorDao actorDao, OptimisationService optimisationService) {
+    public ActorService(ActorDao actorDao, GraphService graphService) {
         this.actorDao = actorDao;
-        this.optimisationService = optimisationService;
+        this.graphService = graphService;
     }
 
     public void create(Actor actor) {
@@ -56,7 +56,7 @@ public class ActorService {
     }
 
     public void update(Actor actor) {
-        if (optimisationService.isGenerating()) {
+        if (graphService.isGenerating()) {
             throw new DataModificationException();
         }
         log.info("updating actor... " + actor);
