@@ -14,11 +14,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class OptimisationService {
-    public void evaluateVertexRanks(List<Allocation> allocations) {
-        Set<Vertex> vertices = allocations.stream().map(Allocation::getVertex).collect(Collectors.toSet());
-        allocations.forEach(a -> a.setVertexRank(evaluateVertexRank(a.getActor(), a.getVertex(), vertices)));
-    }
-
     public void makeStableMatches(List<Allocation> allocations) {
         while (true) {
             Allocation allocation = allocations.stream()
@@ -55,6 +50,11 @@ public class OptimisationService {
                 }
             }
         }
+    }
+
+    public void evaluateVertexRanks(List<Allocation> allocations) {
+        Set<Vertex> vertices = allocations.stream().map(Allocation::getVertex).collect(Collectors.toSet());
+        allocations.forEach(a -> a.setVertexRank(evaluateVertexRank(a.getActor(), a.getVertex(), vertices)));
     }
 
     private double evaluateVertexRank(Actor actor, Vertex vertex, Set<Vertex> vertices) {
