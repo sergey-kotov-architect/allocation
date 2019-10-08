@@ -91,6 +91,7 @@ public class GraphService {
 
         long start = System.currentTimeMillis();
         optimisationService.evaluateVertexRanks(allocations);
+        log.info("making stable matches...");
         optimisationService.makeStableMatches(allocations);
         long elapsed = System.currentTimeMillis() - start;
 
