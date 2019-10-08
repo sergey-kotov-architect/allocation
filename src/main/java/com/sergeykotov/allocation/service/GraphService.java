@@ -7,10 +7,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -52,8 +49,32 @@ public class GraphService {
     }
 
     public Metrics evaluateMetrics() {
-        //TODO: evaluate metrics
-        return null;
+        log.info("evaluating metrics...");
+        Set<Vertex> vertices = new HashSet<>(vertexService.getAll());
+        List<Allocation> allocations = getActiveAllocations();
+        Metrics metrics = new Metrics();
+        Map<Actor, ActorMetrics> actorMetricsMap = metrics.getActorMetricsMap();
+        for (Allocation allocation : allocations) {
+            Actor actor = allocation.getActor();
+            Vertex vertex = allocation.getVertex();
+
+            optimisationService.evaluatePaths(actor, vertex, vertices);
+            int pathCount = vertices.size() - 1;
+            double pathSum = vertices.stream().mapToDouble(Vertex::getPath).sum();
+            double meanPath = pathSum / pathCount;
+            double deviationSum = vertices.stream()
+                    .filter(v -> !v.equals(vertex))
+                    .mapToDouble(v -> Math.abs(v.getPath() - meanPath))
+                    .sum();
+
+            ActorMetrics actorMetrics = new ActorMetrics();
+            actorMetrics.setVertex(vertex);
+            actorMetrics.setMeanPath(meanPath);
+            actorMetrics.setMeanDeviation(deviationSum / pathCount);
+            actorMetricsMap.put(actor, actorMetrics);
+        }
+        log.info("metrics have been evaluated");
+        return metrics;
     }
 
     public Path findShortestPath(Path path) {
