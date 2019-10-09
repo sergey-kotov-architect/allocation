@@ -75,6 +75,7 @@ public class OptimisationService {
             v.setVisited(false);
         });
         vertex.setPath(0.0);
+        vertex.setVisited(true);
         while (true) {
             Optional<Vertex> nextVertex = vertices.stream()
                     .filter(v -> !v.isVisited())
