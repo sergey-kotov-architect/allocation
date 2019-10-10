@@ -75,7 +75,6 @@ public class OptimisationService {
             v.setVisited(false);
         });
         vertex.setPath(0.0);
-        vertex.setVisited(true);
         while (true) {
             Optional<Vertex> nextVertex = vertices.stream()
                     .filter(v -> !v.isVisited())
@@ -83,6 +82,7 @@ public class OptimisationService {
             if (!nextVertex.isPresent()) {
                 break;
             }
+            nextVertex.get().setVisited(true);
             nextVertex.get().getEdges().forEach(e -> resetPath(actor, e));
         }
     }
@@ -93,7 +93,6 @@ public class OptimisationService {
         if (vertex.isVisited()) {
             return;
         }
-        vertex.setVisited(true);
         double speed = Math.min(actor.getSpeed(), edge.getSpeedLimit());
         double time = edge.getDistance() / speed;
         double weight = time / vertex.getRank();
