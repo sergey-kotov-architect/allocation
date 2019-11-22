@@ -12,7 +12,8 @@
     <artifactId>allocation</artifactId>
     <version>1</version>
     <name>allocation</name>
-    <description>Information system of graph, actors, allocations of actors on the graph, generates an optimal
+    <description>
+        Information system of graph, actors, allocations of actors on the graph, generates an optimal
         allocation, evaluates its metrics, finds shortest path for an actor from one vertex to another
     </description>
 
@@ -27,12 +28,12 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
