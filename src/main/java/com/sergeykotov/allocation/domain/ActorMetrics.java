@@ -1,5 +1,7 @@
 package com.sergeykotov.allocation.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ActorMetrics {
     private Vertex vertex;
     private double meanPath;
@@ -16,6 +18,7 @@ public class ActorMetrics {
         this.vertex = vertex;
     }
 
+    @JsonProperty("mean_path")
     public double getMeanPath() {
         return meanPath;
     }
@@ -24,6 +27,7 @@ public class ActorMetrics {
         this.meanPath = meanPath;
     }
 
+    @JsonProperty("mean_deviation")
     public double getMeanDeviation() {
         return meanDeviation;
     }

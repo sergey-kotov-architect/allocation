@@ -1,5 +1,7 @@
 package com.sergeykotov.allocation.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -29,6 +31,9 @@ public class Edge {
     @NotNull
     private Vertex destination;
 
+    public Edge() {
+    }
+
     public long getId() {
         return id;
     }
@@ -53,6 +58,7 @@ public class Edge {
         this.note = note;
     }
 
+    @JsonProperty("speed_limit")
     public double getSpeedLimit() {
         return speedLimit;
     }

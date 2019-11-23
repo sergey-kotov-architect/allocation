@@ -1,5 +1,7 @@
 package com.sergeykotov.allocation.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
@@ -54,6 +56,7 @@ public class Allocation {
         this.vertex = vertex;
     }
 
+    @JsonProperty("actor_rank")
     public double getActorRank() {
         return actorRank;
     }
