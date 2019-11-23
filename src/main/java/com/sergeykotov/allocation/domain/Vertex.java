@@ -1,13 +1,26 @@
 package com.sergeykotov.allocation.domain;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Objects;
 
 public class Vertex {
+    @Positive
     private long id;
+
+    @Size(max = 255)
+    @NotEmpty
     private String name;
+
+    @Size(max = 4000)
     private String note;
+
+    @Positive
     private double rank;
+
+    private transient double normalisedRank;
     private transient List<Edge> edges;
     private transient Actor actor;
     private transient double path;
@@ -51,6 +64,14 @@ public class Vertex {
 
     public List<Edge> getEdges() {
         return edges;
+    }
+
+    public double getNormalisedRank() {
+        return normalisedRank;
+    }
+
+    public void setNormalisedRank(double normalisedRank) {
+        this.normalisedRank = normalisedRank;
     }
 
     public void setEdges(List<Edge> edges) {

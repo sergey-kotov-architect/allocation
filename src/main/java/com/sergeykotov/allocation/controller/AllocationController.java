@@ -6,6 +6,7 @@ import com.sergeykotov.allocation.service.AuthorizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -21,7 +22,7 @@ public class AllocationController {
     }
 
     @PostMapping
-    public void create(@RequestHeader String authorization, @RequestBody Allocation allocation) {
+    public void create(@RequestHeader String authorization, @RequestBody @Valid Allocation allocation) {
         authorizationService.authorize(authorization);
         allocationService.create(allocation);
     }
@@ -39,7 +40,7 @@ public class AllocationController {
     }
 
     @PutMapping
-    public void update(@RequestHeader String authorization, @RequestBody Allocation allocation) {
+    public void update(@RequestHeader String authorization, @RequestBody @Valid Allocation allocation) {
         authorizationService.authorize(authorization);
         allocationService.update(allocation);
     }

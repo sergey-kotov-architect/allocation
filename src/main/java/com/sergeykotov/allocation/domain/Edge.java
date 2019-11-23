@@ -1,14 +1,32 @@
 package com.sergeykotov.allocation.domain;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 
 public class Edge {
+    @Positive
     private long id;
+
+    @Size(max = 255)
+    @NotEmpty
     private String name;
+
+    @Size(max = 4000)
     private String note;
+
+    @Positive
     private double speedLimit;
+
+    @Positive
     private double distance;
+
+    @NotNull
     private Vertex source;
+
+    @NotNull
     private Vertex destination;
 
     public long getId() {

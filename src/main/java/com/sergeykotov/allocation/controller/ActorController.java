@@ -6,6 +6,7 @@ import com.sergeykotov.allocation.service.AuthorizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -21,7 +22,7 @@ public class ActorController {
     }
 
     @PostMapping
-    public void create(@RequestHeader String authorization, @RequestBody Actor actor) {
+    public void create(@RequestHeader String authorization, @RequestBody @Valid Actor actor) {
         authorizationService.authorize(authorization);
         actorService.create(actor);
     }
@@ -39,7 +40,7 @@ public class ActorController {
     }
 
     @PutMapping
-    public void update(@RequestHeader String authorization, @RequestBody Actor actor) {
+    public void update(@RequestHeader String authorization, @RequestBody @Valid Actor actor) {
         authorizationService.authorize(authorization);
         actorService.update(actor);
     }

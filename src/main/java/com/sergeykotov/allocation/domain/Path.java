@@ -1,13 +1,21 @@
 package com.sergeykotov.allocation.domain;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Path {
+    @NotNull
     private Actor actor;
+
+    @NotNull
     private Vertex source;
+
+    @NotNull
     private Vertex destination;
+
     private List<Vertex> vertices = new ArrayList<>();
+
     private double value;
 
     public Path() {

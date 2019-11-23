@@ -1,13 +1,26 @@
 package com.sergeykotov.allocation.domain;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 
 public class Allocation {
+    @Positive
     private long id;
+
+    @NotNull
     private Actor actor;
+
+    @NotNull
     private Vertex vertex;
+
+    @Positive
     private double actorRank;
+
     private boolean active;
+
+    @Size(max = 4000)
     private String note;
 
     private transient double vertexRank;

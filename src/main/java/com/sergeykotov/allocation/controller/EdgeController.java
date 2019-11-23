@@ -6,6 +6,7 @@ import com.sergeykotov.allocation.service.EdgeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -21,7 +22,7 @@ public class EdgeController {
     }
 
     @PostMapping
-    public void create(@RequestHeader String authorization, @RequestBody Edge edge) {
+    public void create(@RequestHeader String authorization, @RequestBody @Valid Edge edge) {
         authorizationService.authorize(authorization);
         edgeService.create(edge);
     }
@@ -39,7 +40,7 @@ public class EdgeController {
     }
 
     @PutMapping
-    public void update(@RequestHeader String authorization, @RequestBody Edge edge) {
+    public void update(@RequestHeader String authorization, @RequestBody @Valid Edge edge) {
         authorizationService.authorize(authorization);
         edgeService.update(edge);
     }

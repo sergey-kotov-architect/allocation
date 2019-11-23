@@ -6,6 +6,7 @@ import com.sergeykotov.allocation.service.VertexService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -21,7 +22,7 @@ public class VertexController {
     }
 
     @PostMapping
-    public void create(@RequestHeader String authorization, @RequestBody Vertex vertex) {
+    public void create(@RequestHeader String authorization, @RequestBody @Valid Vertex vertex) {
         authorizationService.authorize(authorization);
         vertexService.create(vertex);
     }
@@ -39,7 +40,7 @@ public class VertexController {
     }
 
     @PutMapping
-    public void update(@RequestHeader String authorization, @RequestBody Vertex vertex) {
+    public void update(@RequestHeader String authorization, @RequestBody @Valid Vertex vertex) {
         authorizationService.authorize(authorization);
         vertexService.update(vertex);
     }

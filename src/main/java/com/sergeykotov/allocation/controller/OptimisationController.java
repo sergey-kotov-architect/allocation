@@ -8,6 +8,7 @@ import com.sergeykotov.allocation.service.GraphService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -41,7 +42,7 @@ public class OptimisationController {
     }
 
     @GetMapping("path")
-    public Path findShortestPath(@RequestHeader String authorization, @RequestBody Path path) {
+    public Path findShortestPath(@RequestHeader String authorization, @RequestBody @Valid Path path) {
         authorizationService.authorize(authorization);
         return graphService.findShortestPath(path);
     }
