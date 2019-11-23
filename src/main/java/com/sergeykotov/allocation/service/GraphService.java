@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 public class GraphService {
     private static final Logger log = Logger.getLogger(GraphService.class);
     private static final AtomicBoolean generating = new AtomicBoolean();
+
     private final AllocationService allocationService;
     private final VertexService vertexService;
     private final OptimisationService optimisationService;

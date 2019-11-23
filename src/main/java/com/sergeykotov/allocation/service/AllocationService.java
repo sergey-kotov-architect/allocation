@@ -5,6 +5,7 @@ import com.sergeykotov.allocation.domain.Allocation;
 import com.sergeykotov.allocation.exception.DataModificationException;
 import com.sergeykotov.allocation.exception.ExtractionException;
 import com.sergeykotov.allocation.exception.InvalidDataException;
+import com.sergeykotov.allocation.exception.NotFoundException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.List;
 @Service
 public class AllocationService {
     private static final Logger log = Logger.getLogger(AllocationService.class);
+
     private final AllocationDao allocationDao;
     private final GraphService graphService;
 
@@ -39,19 +41,23 @@ public class AllocationService {
     }
 
     public List<Allocation> getAll() {
+        log.info("extracting allocations...");
+        List<Allocation> allocations;
         try {
-            return allocationDao.getAll();
+            allocations = allocationDao.getAll();
         } catch (SQLException e) {
             log.error("failed to extract allocations", e);
             throw new ExtractionException();
         }
+        log.info(allocations.size() + " allocations have been extracted");
+        return allocations;
     }
 
     public Allocation getById(long id) {
         try {
             return allocationDao.getAll().stream()
                     .filter(a -> a.getId() == id)
-                    .findAny().orElseThrow(InvalidDataException::new);
+                    .findAny().orElseThrow(NotFoundException::new);
         } catch (SQLException e) {
             log.error("failed to extract allocation by id " + id, e);
             throw new InvalidDataException();

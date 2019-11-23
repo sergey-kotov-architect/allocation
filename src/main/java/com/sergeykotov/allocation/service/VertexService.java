@@ -5,6 +5,7 @@ import com.sergeykotov.allocation.domain.Vertex;
 import com.sergeykotov.allocation.exception.DataModificationException;
 import com.sergeykotov.allocation.exception.ExtractionException;
 import com.sergeykotov.allocation.exception.InvalidDataException;
+import com.sergeykotov.allocation.exception.NotFoundException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.List;
 @Service
 public class VertexService {
     private static final Logger log = Logger.getLogger(VertexService.class);
+
     private final VertexDao vertexDao;
     private final GraphService graphService;
 
@@ -36,19 +38,23 @@ public class VertexService {
     }
 
     public List<Vertex> getAll() {
+        log.info("extracting vertices...");
+        List<Vertex> vertices;
         try {
-            return vertexDao.getAll();
+            vertices = vertexDao.getAll();
         } catch (SQLException e) {
             log.error("failed to extract vertices", e);
             throw new ExtractionException();
         }
+        log.info(vertices.size() + " vertices have been extracted");
+        return vertices;
     }
 
     public Vertex getById(long id) {
         try {
             return vertexDao.getAll().stream()
                     .filter(v -> v.getId() == id)
-                    .findAny().orElseThrow(InvalidDataException::new);
+                    .findAny().orElseThrow(NotFoundException::new);
         } catch (SQLException e) {
             log.error("failed to extract vertex by id " + id, e);
             throw new InvalidDataException();

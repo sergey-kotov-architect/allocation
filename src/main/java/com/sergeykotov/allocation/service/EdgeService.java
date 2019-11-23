@@ -5,6 +5,7 @@ import com.sergeykotov.allocation.domain.Edge;
 import com.sergeykotov.allocation.exception.DataModificationException;
 import com.sergeykotov.allocation.exception.ExtractionException;
 import com.sergeykotov.allocation.exception.InvalidDataException;
+import com.sergeykotov.allocation.exception.NotFoundException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.List;
 @Service
 public class EdgeService {
     private static final Logger log = Logger.getLogger(EdgeService.class);
+
     private final EdgeDao edgeDao;
     private final GraphService graphService;
 
@@ -36,19 +38,23 @@ public class EdgeService {
     }
 
     public List<Edge> getAll() {
+        log.info("extracting edges...");
+        List<Edge> edges;
         try {
-            return edgeDao.getAll();
+            edges = edgeDao.getAll();
         } catch (SQLException e) {
             log.error("failed to extract edges", e);
             throw new ExtractionException();
         }
+        log.info(edges.size() + " edges have been extracted");
+        return edges;
     }
 
     public Edge getById(long id) {
         try {
             return edgeDao.getAll().stream()
                     .filter(e -> e.getId() == id)
-                    .findAny().orElseThrow(InvalidDataException::new);
+                    .findAny().orElseThrow(NotFoundException::new);
         } catch (SQLException e) {
             log.error("failed to extract edge by id " + id, e);
             throw new InvalidDataException();

@@ -5,6 +5,7 @@ import com.sergeykotov.allocation.domain.Actor;
 import com.sergeykotov.allocation.exception.DataModificationException;
 import com.sergeykotov.allocation.exception.ExtractionException;
 import com.sergeykotov.allocation.exception.InvalidDataException;
+import com.sergeykotov.allocation.exception.NotFoundException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.List;
 @Service
 public class ActorService {
     private static final Logger log = Logger.getLogger(ActorService.class);
+
     private final ActorDao actorDao;
     private final GraphService graphService;
 
@@ -36,19 +38,23 @@ public class ActorService {
     }
 
     public List<Actor> getAll() {
+        log.info("extracting actors...");
+        List<Actor> actors;
         try {
-            return actorDao.getAll();
+            actors = actorDao.getAll();
         } catch (SQLException e) {
             log.error("failed to extract actors", e);
             throw new ExtractionException();
         }
+        log.info(actors.size() + " actors have been extracted");
+        return actors;
     }
 
     public Actor getById(long id) {
         try {
             return actorDao.getAll().stream()
                     .filter(a -> a.getId() == id)
-                    .findAny().orElseThrow(InvalidDataException::new);
+                    .findAny().orElseThrow(NotFoundException::new);
         } catch (SQLException e) {
             log.error("failed to extract actor by id " + id, e);
             throw new InvalidDataException();

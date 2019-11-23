@@ -55,19 +55,30 @@ public class OptimisationService {
 
     public void evaluateVertexRanks(List<Allocation> allocations) {
         Set<Vertex> vertices = allocations.stream().map(Allocation::getVertex).collect(Collectors.toSet());
+        normaliseVertexRanks(vertices);
         allocations.forEach(a -> a.setVertexRank(evaluateVertexRank(a.getActor(), a.getVertex(), vertices)));
     }
 
     private double evaluateVertexRank(Actor actor, Vertex vertex, Set<Vertex> vertices) {
         evaluatePaths(actor, vertex, vertices);
         int pathCount = vertices.size() - 1;
-        double pathSum = vertices.stream().mapToDouble(Vertex::getPath).sum();
+        double pathSum = vertices.stream().mapToDouble(v -> v.getPath()).sum();
         double meanPath = pathSum / pathCount;
         double deviationSum = vertices.stream()
                 .filter(v -> !v.equals(vertex))
                 .mapToDouble(v -> Math.abs(v.getPath() - meanPath))
                 .sum();
         return deviationSum / pathCount;
+    }
+
+    private void normaliseVertexRanks(Set<Vertex> vertices) {
+        double min = vertices.stream().mapToDouble(Vertex::getRank).min().orElse(1.0);
+        double max = vertices.stream().mapToDouble(Vertex::getRank).max().orElse(1.0);
+        double range = max - min;
+        for (Vertex vertex : vertices) {
+            double normalisedRank = (range == 0.0) ? 1.0 : (vertex.getRank() - min) / range + 0.01;
+            vertex.setNormalisedRank(normalisedRank);
+        }
     }
 
     public void evaluatePaths(Actor actor, Vertex vertex, Set<Vertex> vertices) {
@@ -96,8 +107,7 @@ public class OptimisationService {
         }
         double speed = Math.min(actor.getSpeed(), edge.getSpeedLimit());
         double time = edge.getDistance() / speed;
-        double weight = time / vertex.getRank();
-        double path = source.getPath() + weight;
+        double path = source.getPath() + time;
         if (path < vertex.getPath()) {
             vertex.setPath(path);
             vertex.setSource(source);
