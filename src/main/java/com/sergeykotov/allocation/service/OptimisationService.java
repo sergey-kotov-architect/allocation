@@ -62,7 +62,7 @@ public class OptimisationService {
     private double evaluateVertexRank(Actor actor, Vertex vertex, Set<Vertex> vertices) {
         evaluatePaths(actor, vertex, vertices);
         int pathCount = vertices.size() - 1;
-        double pathSum = vertices.stream().mapToDouble(v -> v.getPath()).sum();
+        double pathSum = vertices.stream().mapToDouble(Vertex::getPath).sum();
         double meanPath = pathSum / pathCount;
         double deviationSum = vertices.stream()
                 .filter(v -> !v.equals(vertex))
