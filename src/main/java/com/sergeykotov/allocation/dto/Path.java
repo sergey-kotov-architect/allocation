@@ -1,4 +1,7 @@
-package com.sergeykotov.allocation.domain;
+package com.sergeykotov.allocation.dto;
+
+import com.sergeykotov.allocation.domain.Actor;
+import com.sergeykotov.allocation.domain.Vertex;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;

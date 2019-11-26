@@ -1,6 +1,12 @@
 package com.sergeykotov.allocation.service;
 
-import com.sergeykotov.allocation.domain.*;
+import com.sergeykotov.allocation.domain.Actor;
+import com.sergeykotov.allocation.domain.Allocation;
+import com.sergeykotov.allocation.domain.Vertex;
+import com.sergeykotov.allocation.dto.ActorMetrics;
+import com.sergeykotov.allocation.dto.GenerationResult;
+import com.sergeykotov.allocation.dto.Metrics;
+import com.sergeykotov.allocation.dto.Path;
 import com.sergeykotov.allocation.exception.DataModificationException;
 import com.sergeykotov.allocation.exception.InvalidDataException;
 import org.apache.log4j.Logger;
@@ -33,7 +39,7 @@ public class GraphService {
         return generating.get();
     }
 
-    public String generateOptimalAllocation() {
+    public GenerationResult generateOptimalAllocation() {
         if (generating.get()) {
             throw new DataModificationException();
         }
@@ -105,7 +111,7 @@ public class GraphService {
         return path;
     }
 
-    private String generate() {
+    private GenerationResult generate() {
         log.info("extracting allocations to optimise...");
         List<Allocation> allocations = allocationService.getAll();
         log.info(allocations.size() + " allocations have been extracted");
@@ -123,10 +129,18 @@ public class GraphService {
         } catch (Exception e) {
             String message = "failed to save generated optimal allocation to db, elapsed " + elapsed + " milliseconds";
             log.error(message, e);
-            return message;
+            GenerationResult generationResult = new GenerationResult();
+            generationResult.setGenerated(false);
+            generationResult.setElapsed(elapsed);
+            generationResult.setNote(message);
+            return generationResult;
         }
         String message = "optimal allocation has been generated, elapsed " + elapsed + " milliseconds";
         log.info(message);
-        return message;
+        GenerationResult generationResult = new GenerationResult();
+        generationResult.setGenerated(true);
+        generationResult.setElapsed(elapsed);
+        generationResult.setNote(message);
+        return generationResult;
     }
 }

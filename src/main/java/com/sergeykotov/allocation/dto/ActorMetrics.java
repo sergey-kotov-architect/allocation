@@ -1,6 +1,7 @@
-package com.sergeykotov.allocation.domain;
+package com.sergeykotov.allocation.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sergeykotov.allocation.domain.Vertex;
 
 public class ActorMetrics {
     private Vertex vertex;

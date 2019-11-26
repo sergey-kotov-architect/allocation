@@ -1,8 +1,9 @@
 package com.sergeykotov.allocation.controller;
 
 import com.sergeykotov.allocation.domain.Allocation;
-import com.sergeykotov.allocation.domain.Metrics;
-import com.sergeykotov.allocation.domain.Path;
+import com.sergeykotov.allocation.dto.GenerationResult;
+import com.sergeykotov.allocation.dto.Metrics;
+import com.sergeykotov.allocation.dto.Path;
 import com.sergeykotov.allocation.service.AuthorizationService;
 import com.sergeykotov.allocation.service.GraphService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class OptimisationController {
     }
 
     @PutMapping
-    public String generateOptimalAllocation(@RequestHeader String authorization) {
+    public GenerationResult generateOptimalAllocation(@RequestHeader String authorization) {
         authorizationService.authorize(authorization);
         return graphService.generateOptimalAllocation();
     }
