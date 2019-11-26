@@ -88,9 +88,6 @@ public class GraphService {
         log.info("extracting vertices to find shortest path...");
         Set<Vertex> vertices = new HashSet<>(vertexService.getAll());
         Actor actor = path.getActor();
-        if (actor == null) {
-            throw new InvalidDataException();
-        }
         Vertex source = vertices.stream()
                 .filter(v -> v.equals(path.getSource()))
                 .findAny().orElseThrow(InvalidDataException::new);
