@@ -31,7 +31,7 @@ public class EdgeService {
         try {
             edgeDao.create(edge);
         } catch (SQLException e) {
-            log.error("failed to create edge " + edge, e);
+            log.error("failed to create edge " + edge + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
         log.info("edge has been created " + edge);
@@ -43,7 +43,7 @@ public class EdgeService {
         try {
             edges = edgeDao.getAll();
         } catch (SQLException e) {
-            log.error("failed to extract edges", e);
+            log.error("failed to extract edges, error code: " + e.getErrorCode(), e);
             throw new ExtractionException();
         }
         log.info(edges.size() + " edges have been extracted");
@@ -56,7 +56,7 @@ public class EdgeService {
                     .filter(e -> e.getId() == id)
                     .findAny().orElseThrow(NotFoundException::new);
         } catch (SQLException e) {
-            log.error("failed to extract edge by id " + id, e);
+            log.error("failed to extract edge by id " + id + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
     }
@@ -69,7 +69,7 @@ public class EdgeService {
         try {
             edgeDao.update(edge);
         } catch (SQLException e) {
-            log.error("failed to update edge " + edge, e);
+            log.error("failed to update edge " + edge + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
         log.info("edge has been updated " + edge);
@@ -80,7 +80,7 @@ public class EdgeService {
         try {
             edgeDao.deleteById(id);
         } catch (SQLException e) {
-            log.error("failed to delete edge by id " + id, e);
+            log.error("failed to delete edge by id " + id + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
         log.info("edge has been deleted by id " + id);

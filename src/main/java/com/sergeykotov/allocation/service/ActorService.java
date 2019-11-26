@@ -31,7 +31,7 @@ public class ActorService {
         try {
             actorDao.create(actor);
         } catch (SQLException e) {
-            log.error("failed to create actor " + actor, e);
+            log.error("failed to create actor " + actor + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
         log.info("actor has been created " + actor);
@@ -43,7 +43,7 @@ public class ActorService {
         try {
             actors = actorDao.getAll();
         } catch (SQLException e) {
-            log.error("failed to extract actors", e);
+            log.error("failed to extract actors, error code: " + e.getErrorCode(), e);
             throw new ExtractionException();
         }
         log.info(actors.size() + " actors have been extracted");
@@ -56,7 +56,7 @@ public class ActorService {
                     .filter(a -> a.getId() == id)
                     .findAny().orElseThrow(NotFoundException::new);
         } catch (SQLException e) {
-            log.error("failed to extract actor by id " + id, e);
+            log.error("failed to extract actor by id " + id + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
     }
@@ -69,7 +69,7 @@ public class ActorService {
         try {
             actorDao.update(actor);
         } catch (SQLException e) {
-            log.error("failed to update actor " + actor, e);
+            log.error("failed to update actor " + actor + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
         log.info("actor has been updated " + actor);
@@ -80,7 +80,7 @@ public class ActorService {
         try {
             actorDao.deleteById(id);
         } catch (SQLException e) {
-            log.error("failed to delete actor by id " + id, e);
+            log.error("failed to delete actor by id " + id + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
         log.info("actor has been deleted by id " + id);

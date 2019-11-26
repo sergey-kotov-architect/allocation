@@ -31,7 +31,7 @@ public class VertexService {
         try {
             vertexDao.create(vertex);
         } catch (SQLException e) {
-            log.error("failed to create vertex " + vertex, e);
+            log.error("failed to create vertex " + vertex + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
         log.info("vertex has been created " + vertex);
@@ -43,7 +43,7 @@ public class VertexService {
         try {
             vertices = vertexDao.getAll();
         } catch (SQLException e) {
-            log.error("failed to extract vertices", e);
+            log.error("failed to extract vertices, error code: " + e.getErrorCode(), e);
             throw new ExtractionException();
         }
         log.info(vertices.size() + " vertices have been extracted");
@@ -56,7 +56,7 @@ public class VertexService {
                     .filter(v -> v.getId() == id)
                     .findAny().orElseThrow(NotFoundException::new);
         } catch (SQLException e) {
-            log.error("failed to extract vertex by id " + id, e);
+            log.error("failed to extract vertex by id " + id + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
     }
@@ -69,7 +69,7 @@ public class VertexService {
         try {
             vertexDao.update(vertex);
         } catch (SQLException e) {
-            log.error("failed to update vertex " + vertex, e);
+            log.error("failed to update vertex " + vertex + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
         log.info("vertex has been updated " + vertex);
@@ -80,7 +80,7 @@ public class VertexService {
         try {
             vertexDao.deleteById(id);
         } catch (SQLException e) {
-            log.error("failed to delete vertex by id " + id, e);
+            log.error("failed to delete vertex by id " + id + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
         log.info("vertex has been deleted by id " + id);

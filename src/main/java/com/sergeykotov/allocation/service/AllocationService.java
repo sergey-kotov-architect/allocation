@@ -34,7 +34,7 @@ public class AllocationService {
         try {
             allocationDao.create(allocation);
         } catch (SQLException e) {
-            log.error("failed to create allocation " + allocation, e);
+            log.error("failed to create allocation " + allocation + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
         log.info("allocation has been created " + allocation);
@@ -46,7 +46,7 @@ public class AllocationService {
         try {
             allocations = allocationDao.getAll();
         } catch (SQLException e) {
-            log.error("failed to extract allocations", e);
+            log.error("failed to extract allocations, error code: " + e.getErrorCode(), e);
             throw new ExtractionException();
         }
         log.info(allocations.size() + " allocations have been extracted");
@@ -59,7 +59,7 @@ public class AllocationService {
                     .filter(a -> a.getId() == id)
                     .findAny().orElseThrow(NotFoundException::new);
         } catch (SQLException e) {
-            log.error("failed to extract allocation by id " + id, e);
+            log.error("failed to extract allocation by id " + id + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
     }
@@ -72,7 +72,7 @@ public class AllocationService {
         try {
             allocationDao.update(allocation);
         } catch (SQLException e) {
-            log.error("failed to update allocation " + allocation, e);
+            log.error("failed to update allocation " + allocation + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
         log.info("allocation has been updated " + allocation);
@@ -86,7 +86,7 @@ public class AllocationService {
         try {
             allocationDao.update(allocations);
         } catch (SQLException e) {
-            log.error("failed to update allocations " + allocations, e);
+            log.error("failed to update allocations " + allocations + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
         log.info("allocations have been updated " + allocations);
@@ -99,8 +99,8 @@ public class AllocationService {
         log.info("deleting allocation by id " + id);
         try {
             allocationDao.deleteById(id);
-        } catch (Exception e) {
-            log.error("failed to delete allocation by id " + id, e);
+        } catch (SQLException e) {
+            log.error("failed to delete allocation by id " + id + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
         log.info("allocation has been deleted by id " + id);
