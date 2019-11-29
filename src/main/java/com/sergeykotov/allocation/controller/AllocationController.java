@@ -41,11 +41,13 @@ public class AllocationController {
         return allocationService.getById(id);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestHeader String authorization, @RequestBody @Valid Allocation allocation) {
+    public void updateById(@RequestHeader String authorization,
+                           @PathVariable long id,
+                           @RequestBody @Valid Allocation allocation) {
         authorizationService.authorize(authorization);
-        allocationService.update(allocation);
+        allocationService.updateById(id, allocation);
     }
 
     @DeleteMapping("/{id}")

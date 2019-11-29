@@ -79,7 +79,7 @@ public class AllocationDao {
         }
     }
 
-    public boolean update(Allocation allocation) throws SQLException {
+    public boolean updateById(long id, Allocation allocation) throws SQLException {
         try (Connection connection = ConnectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CMD)) {
             preparedStatement.setLong(1, allocation.getActor().getId());
@@ -87,7 +87,7 @@ public class AllocationDao {
             preparedStatement.setDouble(3, allocation.getActorRank());
             preparedStatement.setBoolean(4, allocation.isActive());
             preparedStatement.setString(5, allocation.getNote());
-            preparedStatement.setLong(6, allocation.getId());
+            preparedStatement.setLong(6, id);
             return preparedStatement.executeUpdate() == 1;
         }
     }

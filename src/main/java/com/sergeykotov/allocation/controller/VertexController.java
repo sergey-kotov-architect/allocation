@@ -41,11 +41,13 @@ public class VertexController {
         return vertexService.getById(id);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestHeader String authorization, @RequestBody @Valid Vertex vertex) {
+    public void updateById(@RequestHeader String authorization,
+                           @PathVariable long id,
+                           @RequestBody @Valid Vertex vertex) {
         authorizationService.authorize(authorization);
-        vertexService.update(vertex);
+        vertexService.updateById(id, vertex);
     }
 
     @DeleteMapping("/{id}")

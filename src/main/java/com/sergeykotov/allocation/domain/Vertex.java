@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class Vertex {
-    @Positive
     private long id;
 
     @Size(max = 255)

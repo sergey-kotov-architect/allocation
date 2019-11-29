@@ -41,11 +41,11 @@ public class EdgeController {
         return edgeService.getById(id);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestHeader String authorization, @RequestBody @Valid Edge edge) {
+    public void updateById(@RequestHeader String authorization, @PathVariable long id, @RequestBody @Valid Edge edge) {
         authorizationService.authorize(authorization);
-        edgeService.update(edge);
+        edgeService.updateById(id, edge);
     }
 
     @DeleteMapping("/{id}")

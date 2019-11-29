@@ -27,14 +27,14 @@ public class ActorService {
     }
 
     public void create(Actor actor) {
-        log.info("creating actor... " + actor);
+        log.info("creating actor " + actor + "...");
         try {
             actorDao.create(actor);
         } catch (SQLException e) {
             log.error("failed to create actor " + actor + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
-        log.info("actor has been created " + actor);
+        log.info("actor " + actor + " has been created");
     }
 
     public List<Actor> getAll() {
@@ -56,33 +56,33 @@ public class ActorService {
                     .filter(a -> a.getId() == id)
                     .findAny().orElseThrow(NotFoundException::new);
         } catch (SQLException e) {
-            log.error("failed to extract actor by id " + id + ", error code: " + e.getErrorCode(), e);
+            log.error("failed to extract actor by ID " + id + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
     }
 
-    public void update(Actor actor) {
+    public void updateById(long id, Actor actor) {
         if (graphService.isGenerating()) {
             throw new DataModificationException();
         }
-        log.info("updating actor... " + actor);
+        log.info("updating actor by ID " + id + "...");
         try {
-            actorDao.update(actor);
+            actorDao.updateById(id, actor);
         } catch (SQLException e) {
-            log.error("failed to update actor " + actor + ", error code: " + e.getErrorCode(), e);
+            log.error("failed to update actor by ID " + id + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
-        log.info("actor has been updated " + actor);
+        log.info("actor has been updated by ID " + id);
     }
 
     public void deleteById(long id) {
-        log.info("deleting actor by id " + id);
+        log.info("deleting actor by ID " + id);
         try {
             actorDao.deleteById(id);
         } catch (SQLException e) {
-            log.error("failed to delete actor by id " + id + ", error code: " + e.getErrorCode(), e);
+            log.error("failed to delete actor by ID " + id + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
-        log.info("actor has been deleted by id " + id);
+        log.info("actor has been deleted by ID " + id);
     }
 }

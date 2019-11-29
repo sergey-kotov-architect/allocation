@@ -56,13 +56,13 @@ public class VertexDao {
         }
     }
 
-    public boolean update(Vertex vertex) throws SQLException {
+    public boolean updateById(long id, Vertex vertex) throws SQLException {
         try (Connection connection = ConnectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CMD)) {
             preparedStatement.setString(1, vertex.getName());
             preparedStatement.setString(2, vertex.getNote());
             preparedStatement.setDouble(3, vertex.getRank());
-            preparedStatement.setLong(4, vertex.getId());
+            preparedStatement.setLong(4, id);
             return preparedStatement.executeUpdate() == 1;
         }
     }

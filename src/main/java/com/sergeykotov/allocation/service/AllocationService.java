@@ -30,14 +30,14 @@ public class AllocationService {
         if (graphService.isGenerating()) {
             throw new DataModificationException();
         }
-        log.info("creating allocation... " + allocation);
+        log.info("creating allocation " + allocation + "...");
         try {
             allocationDao.create(allocation);
         } catch (SQLException e) {
             log.error("failed to create allocation " + allocation + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
-        log.info("allocation has been created " + allocation);
+        log.info("allocation " + allocation + " has been created");
     }
 
     public List<Allocation> getAll() {
@@ -59,23 +59,23 @@ public class AllocationService {
                     .filter(a -> a.getId() == id)
                     .findAny().orElseThrow(NotFoundException::new);
         } catch (SQLException e) {
-            log.error("failed to extract allocation by id " + id + ", error code: " + e.getErrorCode(), e);
+            log.error("failed to extract allocation by ID " + id + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
     }
 
-    public void update(Allocation allocation) {
+    public void updateById(long id, Allocation allocation) {
         if (graphService.isGenerating()) {
             throw new DataModificationException();
         }
-        log.info("updating allocation... " + allocation);
+        log.info("updating allocation by ID " + id + "...");
         try {
-            allocationDao.update(allocation);
+            allocationDao.updateById(id, allocation);
         } catch (SQLException e) {
-            log.error("failed to update allocation " + allocation + ", error code: " + e.getErrorCode(), e);
+            log.error("failed to update allocation by ID " + id + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
-        log.info("allocation has been updated " + allocation);
+        log.info("allocation has been updated by ID " + id);
     }
 
     public void update(List<Allocation> allocations) {
@@ -96,13 +96,13 @@ public class AllocationService {
         if (graphService.isGenerating()) {
             throw new DataModificationException();
         }
-        log.info("deleting allocation by id " + id);
+        log.info("deleting allocation by ID " + id);
         try {
             allocationDao.deleteById(id);
         } catch (SQLException e) {
-            log.error("failed to delete allocation by id " + id + ", error code: " + e.getErrorCode(), e);
+            log.error("failed to delete allocation by ID " + id + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
-        log.info("allocation has been deleted by id " + id);
+        log.info("allocation has been deleted by ID " + id);
     }
 }

@@ -41,11 +41,13 @@ public class ActorController {
         return actorService.getById(id);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestHeader String authorization, @RequestBody @Valid Actor actor) {
+    public void updateById(@RequestHeader String authorization,
+                           @PathVariable long id,
+                           @RequestBody @Valid Actor actor) {
         authorizationService.authorize(authorization);
-        actorService.update(actor);
+        actorService.updateById(id, actor);
     }
 
     @DeleteMapping("/{id}")

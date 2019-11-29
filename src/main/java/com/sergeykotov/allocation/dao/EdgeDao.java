@@ -68,7 +68,7 @@ public class EdgeDao {
         }
     }
 
-    public boolean update(Edge edge) throws SQLException {
+    public boolean updateById(long id, Edge edge) throws SQLException {
         try (Connection connection = ConnectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CMD)) {
             preparedStatement.setString(1, edge.getName());
@@ -77,7 +77,7 @@ public class EdgeDao {
             preparedStatement.setDouble(4, edge.getDistance());
             preparedStatement.setDouble(5, edge.getSource().getId());
             preparedStatement.setDouble(6, edge.getDestination().getId());
-            preparedStatement.setLong(7, edge.getId());
+            preparedStatement.setLong(7, id);
             return preparedStatement.executeUpdate() == 1;
         }
     }

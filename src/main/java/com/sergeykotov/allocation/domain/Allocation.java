@@ -8,7 +8,6 @@ import javax.validation.constraints.Size;
 import java.util.Objects;
 
 public class Allocation {
-    @Positive
     private long id;
 
     @NotNull

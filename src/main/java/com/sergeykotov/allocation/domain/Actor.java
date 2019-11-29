@@ -6,7 +6,6 @@ import javax.validation.constraints.Size;
 import java.util.Objects;
 
 public class Actor {
-    @Positive
     private long id;
 
     @Size(max = 255)

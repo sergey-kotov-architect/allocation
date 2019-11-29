@@ -27,14 +27,14 @@ public class EdgeService {
     }
 
     public void create(Edge edge) {
-        log.info("creating edge... " + edge);
+        log.info("creating edge " + edge + "...");
         try {
             edgeDao.create(edge);
         } catch (SQLException e) {
             log.error("failed to create edge " + edge + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
-        log.info("edge has been created " + edge);
+        log.info("edge " + edge + " has been created");
     }
 
     public List<Edge> getAll() {
@@ -56,33 +56,33 @@ public class EdgeService {
                     .filter(e -> e.getId() == id)
                     .findAny().orElseThrow(NotFoundException::new);
         } catch (SQLException e) {
-            log.error("failed to extract edge by id " + id + ", error code: " + e.getErrorCode(), e);
+            log.error("failed to extract edge by ID " + id + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
     }
 
-    public void update(Edge edge) {
+    public void updateById(long id, Edge edge) {
         if (graphService.isGenerating()) {
             throw new DataModificationException();
         }
-        log.info("updating edge... " + edge);
+        log.info("updating edge by ID " + id + "...");
         try {
-            edgeDao.update(edge);
+            edgeDao.updateById(id, edge);
         } catch (SQLException e) {
-            log.error("failed to update edge " + edge + ", error code: " + e.getErrorCode(), e);
+            log.error("failed to update edge by ID " + id + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
-        log.info("edge has been updated " + edge);
+        log.info("edge has been updated by ID " + id);
     }
 
     public void deleteById(long id) {
-        log.info("deleting edge by id " + id);
+        log.info("deleting edge by ID " + id);
         try {
             edgeDao.deleteById(id);
         } catch (SQLException e) {
-            log.error("failed to delete edge by id " + id + ", error code: " + e.getErrorCode(), e);
+            log.error("failed to delete edge by ID " + id + ", error code: " + e.getErrorCode(), e);
             throw new InvalidDataException();
         }
-        log.info("edge has been deleted by id " + id);
+        log.info("edge has been deleted by ID " + id);
     }
 }
