@@ -4,6 +4,7 @@ import com.sergeykotov.allocation.domain.Vertex;
 import com.sergeykotov.allocation.service.AuthorizationService;
 import com.sergeykotov.allocation.service.VertexService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,6 +23,7 @@ public class VertexController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public void create(@RequestHeader String authorization, @RequestBody @Valid Vertex vertex) {
         authorizationService.authorize(authorization);
         vertexService.create(vertex);
@@ -40,12 +42,14 @@ public class VertexController {
     }
 
     @PutMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestHeader String authorization, @RequestBody @Valid Vertex vertex) {
         authorizationService.authorize(authorization);
         vertexService.update(vertex);
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@RequestHeader String authorization, @PathVariable long id) {
         authorizationService.authorize(authorization);
         vertexService.deleteById(id);

@@ -4,6 +4,7 @@ import com.sergeykotov.allocation.domain.Allocation;
 import com.sergeykotov.allocation.service.AllocationService;
 import com.sergeykotov.allocation.service.AuthorizationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,6 +23,7 @@ public class AllocationController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public void create(@RequestHeader String authorization, @RequestBody @Valid Allocation allocation) {
         authorizationService.authorize(authorization);
         allocationService.create(allocation);
@@ -40,12 +42,14 @@ public class AllocationController {
     }
 
     @PutMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestHeader String authorization, @RequestBody @Valid Allocation allocation) {
         authorizationService.authorize(authorization);
         allocationService.update(allocation);
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@RequestHeader String authorization, @PathVariable long id) {
         authorizationService.authorize(authorization);
         allocationService.deleteById(id);
