@@ -142,7 +142,7 @@ public class OptimisationServiceTest {
     @Test
     public void test() {
         List<Allocation> expected = new ArrayList<>();
-        expected.add(allocation11);
+        expected.add(allocation13);
         expected.add(allocation22);
 
         optimisationService.evaluateVertexRanks(allocations);

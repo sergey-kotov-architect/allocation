@@ -19,7 +19,7 @@ public class Vertex {
     @Positive
     private double rank;
 
-    private transient double normalisedRank = 1.0;
+    private transient double normalisedRank = 0.0;
     private transient List<Edge> edges;
     private transient Actor actor;
     private transient double path;

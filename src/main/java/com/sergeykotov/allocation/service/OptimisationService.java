@@ -26,7 +26,7 @@ public class OptimisationService {
             Actor actor = allocation.getActor();
             List<Allocation> candidates = allocations.stream()
                     .filter(a -> a.getActor().equals(actor) && !a.isProposed())
-                    .sorted(Comparator.comparingDouble(Allocation::getVertexRank))
+                    .sorted(Comparator.comparingDouble(Allocation::getVertexRank).reversed())
                     .collect(Collectors.toList());
             for (Allocation candidate : candidates) {
                 candidate.setProposed(true);
@@ -107,7 +107,7 @@ public class OptimisationService {
         }
         double speed = Math.min(actor.getSpeed(), edge.getSpeedLimit());
         double time = edge.getDistance() / speed;
-        double weight = time * vertex.getNormalisedRank();
+        double weight = time * (1 - vertex.getNormalisedRank());
         double path = source.getPath() + weight;
         if (path < vertex.getPath()) {
             vertex.setPath(path);
