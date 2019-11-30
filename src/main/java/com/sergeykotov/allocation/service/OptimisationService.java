@@ -75,7 +75,7 @@ public class OptimisationService {
         double min = vertices.stream().mapToDouble(Vertex::getRank).min().orElse(1.0);
         double max = vertices.stream().mapToDouble(Vertex::getRank).max().orElse(1.0);
         double range = max - min;
-        if (range != 0.0) {
+        if (range == 0.0) {
             return;
         }
         for (Vertex vertex : vertices) {
