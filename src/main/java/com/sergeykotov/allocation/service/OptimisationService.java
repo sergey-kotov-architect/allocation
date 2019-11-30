@@ -79,7 +79,7 @@ public class OptimisationService {
             return;
         }
         for (Vertex vertex : vertices) {
-            double normalisedRank = 1 - (vertex.getRank() - min) / range;
+            double normalisedRank = 1.0 - (vertex.getRank() - min) / range;
             vertex.setNormalisedRank(normalisedRank);
         }
     }
