@@ -76,7 +76,7 @@ public class OptimisationService {
         double max = vertices.stream().mapToDouble(Vertex::getRank).max().orElse(1.0);
         double range = max - min;
         for (Vertex vertex : vertices) {
-            double normalisedRank = (range == 0.0) ? 1.0 : (vertex.getRank() - min) / range + 0.01;
+            double normalisedRank = (range == 0.0) ? 1.0 : (vertex.getRank() - min) / range;
             vertex.setNormalisedRank(normalisedRank);
         }
     }
@@ -107,7 +107,8 @@ public class OptimisationService {
         }
         double speed = Math.min(actor.getSpeed(), edge.getSpeedLimit());
         double time = edge.getDistance() / speed;
-        double path = source.getPath() + time;
+        double weight = time * vertex.getNormalisedRank();
+        double path = source.getPath() + weight;
         if (path < vertex.getPath()) {
             vertex.setPath(path);
             vertex.setSource(source);
