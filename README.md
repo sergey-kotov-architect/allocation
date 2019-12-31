@@ -23,10 +23,9 @@ between actors and vertices according to their mutual ranks
 
 ### Technologies and tools
 * Java 8
-* Spring framework (Boot, Web/MVC, Test, Actuator)
+* Spring framework (Boot, Web/MVC, Test, Actuator, slf4j/logback)
 * Spring Data and JDBC with Apache DBCP (in different branches)
 * SQLite
-* Apache log4j
 * Maven
 * Git
 * IntelliJ IDEA
