@@ -6,7 +6,8 @@ import com.sergeykotov.allocation.exception.DataModificationException;
 import com.sergeykotov.allocation.exception.ExtractionException;
 import com.sergeykotov.allocation.exception.InvalidDataException;
 import com.sergeykotov.allocation.exception.NotFoundException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ import java.util.List;
 
 @Service
 public class ActorService {
-    private static final Logger log = Logger.getLogger(ActorService.class);
+    private static final Logger log = LoggerFactory.getLogger(ActorService.class);
 
     private final ActorDao actorDao;
     private final GraphService graphService;

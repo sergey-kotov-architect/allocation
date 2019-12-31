@@ -9,7 +9,8 @@ import com.sergeykotov.allocation.dto.Metrics;
 import com.sergeykotov.allocation.dto.Path;
 import com.sergeykotov.allocation.exception.DataModificationException;
 import com.sergeykotov.allocation.exception.InvalidDataException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class GraphService {
-    private static final Logger log = Logger.getLogger(GraphService.class);
+    private static final Logger log = LoggerFactory.getLogger(GraphService.class);
     private static final AtomicBoolean generating = new AtomicBoolean();
 
     private final AllocationService allocationService;
