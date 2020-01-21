@@ -18,8 +18,7 @@ public class OptimisationService {
         while (true) {
             Allocation allocation = allocations.stream()
                     .filter(a -> a.getActor().getVertex() == null && !a.isProposed())
-                    .sorted(Comparator.comparingDouble(Allocation::getActorRank).reversed())
-                    .findAny().orElse(null);
+                    .max(Comparator.comparingDouble(Allocation::getActorRank)).orElse(null);
             if (allocation == null) {
                 break;
             }
